@@ -1,15 +1,36 @@
 		global _start
 
 		section .text
-_start:
-		mov		rax, 2		; "open" syscall
-		mov		rdi, path	; arg 1: path
-		xor		rsi, rsi	; arg 2: flags (0 = O_RDONLY)
+_start:	mov		rax, 2		; `open`
+		mov 	rdi, path	
+		xor 	rsi, rsi	; O_RDONLY
 		syscall
 
-		mov 	rax, 60		; "exit" syscall
-		xor 	rdi, rdi	; <---- exit with code 0
+		push	rax			; push file decriptor onto stack
+		sub		rsp, 16		; reserve 16 bytes of memory
+
+red_buffer:
+		xor		rax, rax	; `read`
+		mov		rdi, [rsp+16]; file descriptor
+		mov 	rsi, rsp	; address of buffer
+		mov 	rdx, 16		; size of buffer
 		syscall
 
+		test	rax, rax
+		jz		exit		; jump if zero
+
+		mov		rdx, rax	; number of bytes
+		mov		rax, 1		; `write`
+		mov 	rdi, 1		; file descriptor (stdout)
+		mov		rsi, rsp	; address of buffer
+		syscall	
+
+		jmp		read_buffer
+
+exit:
+		mov		rax, 60		; `exit`
+		xor		rdi, rdi	; return code 0
+		syscall
+	
 		section .data
-path:	db		"/etc/hosts", 0 ; null-terminated
+path:	db		"/etc/hosts", 0; null-terminated	
