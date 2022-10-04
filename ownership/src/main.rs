@@ -1,12 +1,12 @@
 fn main() {
+
     {
-        let s = "hello";
+        let _s = "hello";
     }
 
+    let mut my_str = String::from("hiiiiiii");
 
-    let mut s = String::from("hiiiiiii");
+    my_str.push_str(", there");
 
-    s.push_str(", there");
-
-    println!("{}", s);
+    println!("{}", my_str);
 }
