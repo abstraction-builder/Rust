@@ -12,4 +12,13 @@ fn main() {
     let _truncated = -5 / 3;
 
     let _reminred = 43 % 5;
+
+    let b = true;
+
+    /* Bool example */
+    let f: bool = false;
+
+    /* Char example */
+    let c = 'f';
+    let foo: char = 'f';
 }
